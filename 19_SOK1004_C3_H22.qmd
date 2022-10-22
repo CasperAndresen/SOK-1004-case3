@@ -210,6 +210,9 @@ Nå er det deres tur til å rydde. Slett variablene `year` og `month`. Gi variab
 
 ```{r}
 # løs oppgave II her
+df <- subset(df, select = -c(year,month))
+df <- df %>% 
+  filter(dato >= "2011-01-01")
 ```
 
 # Oppgave III: Beregn et vektet gjennomsnitt
@@ -222,6 +225,14 @@ Del vektene i `df` på 1000, og sjekk at de summerer seg til om lag `1` for hver
 
 ```{r}
 # besvar oppgave IIIa her
+df_vekt <- df %>% 
+  filter(statistikkvariabel == "Konsumprisindeks (vekter)") %>%
+  mutate(value = value/1000)
+
+df_vekt %>%
+  group_by(dato) %>%
+  summarize(sum_av_vekt = sum(value)) %>%
+  mutate(avvik = 1 - sum_av_vekt)
 ```
 
 ## Oppgave IIIb: Beregn prisindeksen fra gruppene med vekter
